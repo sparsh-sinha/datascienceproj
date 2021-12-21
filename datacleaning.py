@@ -17,16 +17,16 @@ df['min_salary'] = min_hr.apply(lambda x: int(x.split('-')[0]))
 df['max_salary'] = min_hr.apply(lambda x: int(x.split('-')[1]))
 df['avg_salary'] = (df.min_salary+df.max_salary)/2
 
-#Company name text only
+#Company 
 df['company_txt'] = df.apply(lambda x: x['Company Name'] if x['Rating'] <0 else x['Company Name'][:-3], axis = 1)
 
-#state field 
+#state
 df['job_state'] = df['Location'].apply(lambda x: x.split(',')[1])
 df.job_state.value_counts()
 
 df['same_state'] = df.apply(lambda x: 1 if x.Location == x.Headquarters else 0, axis = 1)
 
-#age of company 
+#age 
 df['age'] = df.Founded.apply(lambda x: x if x <1 else 2020 - x)
 
 #parsing of job description (python, etc.)
@@ -52,6 +52,4 @@ df.excel.value_counts()
 
 df.columns
 
-df_out = df.drop(['Unnamed: 0'], axis =1)
 
-df_out.to_csv('salary_data_cleaned.csv',index = False)
