@@ -6,13 +6,15 @@ df = pd.read_csv('glassdoor_jobs.csv')
 
 df['hourly'] = df['Salary Estimate'].apply(lambda x: 1 if 'per hour' in x.lower() else 0)
 df['employer_provided'] = df['Salary Estimate'].apply(lambda x: 1 if 'employer provided salary:' in x.lower() else 0)
-
+#removing salary estimate rows with -1 value
 df = df[df['Salary Estimate'] != '-1']
+#doing basic cleansing like in the salary field taking up the numerical values and removing any iregular symbols that might hinders the process
 salary = df['Salary Estimate'].apply(lambda x: x.split('(')[0])
+#removing k and dollar signs
 minus_Kd = salary.apply(lambda x: x.replace('K','').replace('$',''))
 
 min_hr = minus_Kd.apply(lambda x: x.lower().replace('per hour','').replace('employer provided salary:',''))
-
+#separating minimum, maximum and avg salary fields
 df['min_salary'] = min_hr.apply(lambda x: int(x.split('-')[0]))
 df['max_salary'] = min_hr.apply(lambda x: int(x.split('-')[1]))
 df['avg_salary'] = (df.min_salary+df.max_salary)/2
@@ -30,8 +32,8 @@ df['same_state'] = df.apply(lambda x: 1 if x.Location == x.Headquarters else 0, 
 df['age'] = df.Founded.apply(lambda x: x if x <1 else 2020 - x)
 
 #parsing of job description (python, etc.)
-
-#python
+#to understand what all job desriptions has python or any other tool for that matter is available in the JD or not
+#python 
 df['python_yn'] = df['Job Description'].apply(lambda x: 1 if 'python' in x.lower() else 0)
  
 #r studio 
